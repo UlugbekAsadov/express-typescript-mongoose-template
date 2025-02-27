@@ -9,11 +9,13 @@ class Config {
   public basePath: string;
   public port: string;
   public mongoUri: string;
+  public jwtSecret: string;
 
   constructor() {
     this.basePath = "/api/v1";
     this.port = process.env.PORT || "9000";
     this.mongoUri = process.env.MONGO_URI || "";
+    this.jwtSecret = process.env.JWT_SECRET || "JWT_SECRET";
   }
 
   public createLogger(name: string): bunyan {
