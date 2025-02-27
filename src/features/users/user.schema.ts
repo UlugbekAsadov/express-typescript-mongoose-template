@@ -1,4 +1,5 @@
 import mongoose, { Document } from "mongoose";
+
 import { UserRoles } from "./utils/user.enum";
 
 interface IUser extends Document {

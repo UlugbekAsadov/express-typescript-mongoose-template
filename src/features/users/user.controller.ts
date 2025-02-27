@@ -1,11 +1,12 @@
-import { Request, Response, Express } from "express";
-import { asyncWrapper } from "../../middlewares/async-wrapper.middleware";
-import { User } from "./user.schema";
-import { UserRoles } from "./utils/user.enum";
 import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+
+import { asyncWrapper } from "../../middlewares/async-wrapper.middleware";
 import { generateToken, hashPassword } from "../../utils/auth.utils";
 import { BadRequestError, NotAuthorizedError, NotFoundError } from "../../utils/error-handler";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../utils/response-messages";
+import { User } from "./user.schema";
+import { UserRoles } from "./utils/user.enum";
 
 export const loginUser = asyncWrapper(async (req: Request, res: Response) => {
   const { email, password } = req.body;

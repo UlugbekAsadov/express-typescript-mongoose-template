@@ -1,4 +1,5 @@
 import Joi from "joi";
+
 import { UserRoles } from "./utils/user.enum";
 
 export const registerSchema = Joi.object({

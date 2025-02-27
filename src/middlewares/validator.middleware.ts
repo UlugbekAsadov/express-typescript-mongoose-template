@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction,Request, Response } from "express";
 import Joi from "joi";
+
 import { ERROR_MESSAGES } from "../utils/response-messages";
 
 export const validate = (schema: Joi.ObjectSchema) => {

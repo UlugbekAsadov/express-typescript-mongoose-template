@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 import { config } from "./config";
 import { IJWTData } from "./interfaces/jwt.interface";
 
@@ -19,7 +21,7 @@ export const generateToken = (userId: string, role: string): string => {
 export const verifyToken = (token: string): IJWTData | null => {
   try {
     return jwt.verify(token, config.jwtSecret) as IJWTData;
-  } catch (error) {
+  } catch (err) {
     return null;
   }
 };

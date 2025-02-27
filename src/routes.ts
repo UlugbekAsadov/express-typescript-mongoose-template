@@ -1,7 +1,7 @@
 import { Application } from "express";
 
-import { config } from "./utils/config";
 import { userRouter } from "./features/users/user.routes";
+import { config } from "./utils/config";
 
 export default (app: Application) => {
   const routes = () => {

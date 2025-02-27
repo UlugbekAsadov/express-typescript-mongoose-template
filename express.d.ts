@@ -1,4 +1,3 @@
-import { Request } from "express";
 import { IJWTData } from "./src/utils/interfaces/jwt.interface";
 
 declare module "express-serve-static-core" {
