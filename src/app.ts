@@ -3,7 +3,7 @@ import cors from "cors";
 import { Application, json, NextFunction, Request, Response, urlencoded } from "express";
 import HTTPS_STATUS from "http-status-codes";
 
-import applicationRoutes from "./routes";
+import { superAdminRoutes, userRoutes } from "./routes";
 import { config } from "./utils/config";
 import { CustomError } from "./utils/error-handler";
 import { IErrorResponse } from "./utils/interfaces/error.interface";
@@ -43,7 +43,8 @@ export class Server {
   }
 
   private routedMiddleware(app: Application): void {
-    applicationRoutes(app);
+    userRoutes(app);
+    superAdminRoutes(app);
   }
 
   private globalErrorHandler(app: Application): void {
