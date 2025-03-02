@@ -24,6 +24,10 @@ export const createShop = asyncWrapper(async (req: Request, res: Response) => {
 
   const shop = await Shop.create({ name, owner, location, description, subdomain, opens_at, closes_at, image, banner });
 
+  userExists.role = UserRoles.STORE_OWNER;
+
+  await userExists.save();
+
   res.status(201).json({ message: SUCCESS_MESSAGES.SHOP_CREATED_SUCCESSFULLY, shop });
 });
 

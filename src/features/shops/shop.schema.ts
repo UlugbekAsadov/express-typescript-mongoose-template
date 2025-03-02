@@ -27,4 +27,4 @@ const ShopSchema = new Schema<IShop>(
   { timestamps: true },
 );
 
-export const Shop = mongoose.model<IShop>("Store", ShopSchema);
+export const Shop = mongoose.model<IShop>("Shop", ShopSchema);
