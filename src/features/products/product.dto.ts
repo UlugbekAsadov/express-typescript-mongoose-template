@@ -1,7 +1,6 @@
 import Joi from "joi";
 
 const variantSchema = Joi.object({
-  id: Joi.string().required(),
   name: Joi.string().trim().min(1).max(100).required(),
   price: Joi.number().min(0).required(),
   compare_price: Joi.number().min(0).optional(),

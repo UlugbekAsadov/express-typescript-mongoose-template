@@ -1,11 +1,11 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 import { ICategory } from "../categories/category.schema";
 import { IShop } from "../shops/shop.schema";
 
 export interface IVariant {
   name: string;
-  id: string;
+  id: ObjectId;
   price: number;
   compare_price?: number | null;
   image?: string | null;
@@ -26,7 +26,7 @@ export interface IProduct extends Document {
 const VariantSchema = new Schema<IVariant>(
   {
     name: { type: String, required: true },
-    id: { type: String, required: true, unique: true },
+    id: { type: Schema.Types.ObjectId, auto: true },
     price: { type: Number, required: true },
     compare_price: { type: Number, default: null },
     image: { type: String, default: null },
