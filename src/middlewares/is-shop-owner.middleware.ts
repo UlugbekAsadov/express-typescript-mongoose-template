@@ -7,22 +7,20 @@ import { ERROR_MESSAGES } from "../utils/response-messages";
 
 export const shopOwnershipRequired = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?.id;
-    const userRole = req.user?.role
-    const host = req.hostname;
-    const subdomain = host.split(".")[0];
+    const userShopId = req.user?.shop_id;
+    const userRole = req.user?.role;
 
-    if (!userId) {
+    if (!userShopId) {
       throw new BadRequestError(ERROR_MESSAGES.UNAUTHORIZED_ACCESS);
     }
 
-    const shop = await Shop.findOne({ owner: userId });
+    const shop = await Shop.findById(userShopId);
 
     if (!shop) {
       throw new NotFoundError(ERROR_MESSAGES.SHOP_NOT_FOUND);
     }
 
-    if (shop.subdomain !== subdomain && userRole !== UserRoles.STORE_OWNER) {
+    if (userRole !== UserRoles.STORE_OWNER) {
       throw new BadRequestError(ERROR_MESSAGES.THIS_SHOP_IS_NOT_BELONG_TO_YOU);
     }
 

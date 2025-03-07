@@ -25,7 +25,7 @@ export class Server {
   }
 
   private securityMiddlewares(app: Application): void {
-    const allowedOrigins = ["http://xotdog.localhost:3000", "http://shop1.localhost:3000", "http://shop2.localhost:3000"];
+    const allowedOrigins = ["http://localhost:3000"];
 
     app.use(
       cors({
@@ -36,7 +36,7 @@ export class Server {
             callback(new Error("Not allowed by CORS"));
           }
         },
-        credentials: true, // Allow cookies and authentication headers
+        credentials: true,
       }),
     );
   }

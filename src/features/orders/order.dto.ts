@@ -3,6 +3,7 @@ import Joi from "joi";
 import { OrderStatus } from "./utils/order.enum";
 
 export const createOrderSchema = Joi.object({
+  shop_id: Joi.string().required(),
   products: Joi.array()
     .items(
       Joi.object({

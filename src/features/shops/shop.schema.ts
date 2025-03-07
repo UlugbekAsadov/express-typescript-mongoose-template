@@ -2,7 +2,6 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface IShop extends Document {
   name: string;
-  subdomain: string;
   description: string | null;
   owner: mongoose.Schema.Types.ObjectId;
   location: number[];
@@ -15,7 +14,6 @@ export interface IShop extends Document {
 const ShopSchema = new Schema<IShop>(
   {
     name: { type: String, required: true },
-    subdomain: { type: String, required: true, unique: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     location: { type: [Number], required: true },
     description: { type: String },

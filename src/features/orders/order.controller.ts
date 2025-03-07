@@ -10,11 +10,10 @@ import { OrderStatus } from "./utils/order.enum";
 
 // Create Order
 export const createOrder = asyncWrapper(async (req: Request, res: Response) => {
-  const { products } = req.body;
+  const { products, shop_id } = req.body;
   const userId = req.user?.id;
-  const subdomain = req.hostname.split(".")[0];
 
-  const shop = await Shop.findOne({ subdomain });
+  const shop = await Shop.findById(shop_id);
 
   if (!shop) {
     throw new NotFoundError(ERROR_MESSAGES.SHOP_NOT_FOUND);

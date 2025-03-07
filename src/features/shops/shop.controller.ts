@@ -1,20 +1,14 @@
 import { Request, Response } from "express";
 
 import { asyncWrapper } from "../../middlewares/async-wrapper.middleware";
-import { BadRequestError, NotFoundError } from "../../utils/error-handler";
+import { NotFoundError } from "../../utils/error-handler";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../utils/response-messages";
 import { User } from "../users/user.schema";
 import { UserRoles } from "../users/utils/user.enum";
 import { Shop } from "./shop.schema";
 
 export const createShop = asyncWrapper(async (req: Request, res: Response) => {
-  const { name, owner, description, location, subdomain, opens_at, closes_at, image, banner } = req.body;
-
-  const existingShop = await Shop.findOne({ subdomain });
-
-  if (existingShop) {
-    throw new BadRequestError(ERROR_MESSAGES.SHOP_ALREADY_EXISTS);
-  }
+  const { name, owner, description, location, opens_at, closes_at, image, banner } = req.body;
 
   const userExists = await User.findById(owner);
 
@@ -22,7 +16,7 @@ export const createShop = asyncWrapper(async (req: Request, res: Response) => {
     throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
   }
 
-  const shop = await Shop.create({ name, owner, location, description, subdomain, opens_at, closes_at, image, banner });
+  const shop = await Shop.create({ name, owner, location, description, opens_at, closes_at, image, banner });
 
   userExists.role = UserRoles.STORE_OWNER;
   userExists.shop = shop._id as string;
@@ -62,23 +56,9 @@ export const getMyShop = asyncWrapper(async (req: Request, res: Response) => {
 
 export const updateShop = asyncWrapper(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { name, description, location, opens_at, closes_at, image, banner, subdomain } = req.body;
-  const userRole = req.user?.role;
+  const { name, description, location, opens_at, closes_at, image, banner } = req.body;
 
-  let shop = undefined;
-
-  if (userRole === UserRoles.SUPER_ADMIN) {
-    const updatingShop = await Shop.findOne({ subdomain });
-
-    if (updatingShop && updatingShop.subdomain !== subdomain) {
-      throw new BadRequestError(ERROR_MESSAGES.SHOP_SUBDOMAIN_EXIST);
-    }
-
-    shop = await Shop.findById(id);
-  } else {
-    const userId = req.user?.id;
-    shop = await Shop.findOne({ owner: userId });
-  }
+  const shop = await Shop.findById(id);
 
   if (!shop) {
     throw new NotFoundError(ERROR_MESSAGES.SHOP_NOT_FOUND);
@@ -91,10 +71,6 @@ export const updateShop = asyncWrapper(async (req: Request, res: Response) => {
   shop.closes_at = closes_at || shop?.closes_at;
   shop.image = image || shop?.image;
   shop.banner = banner || shop?.banner;
-
-  if (userRole === UserRoles.SUPER_ADMIN) {
-    shop.subdomain = subdomain || shop.subdomain;
-  }
 
   await shop.save();
 

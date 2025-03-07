@@ -10,7 +10,6 @@ import { UserRoles } from "./utils/user.enum";
 
 export const loginUser = asyncWrapper(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const subdomain = req.hostname.split(".")[0];
 
   const user = await User.findOne({ email });
 
@@ -26,7 +25,7 @@ export const loginUser = asyncWrapper(async (req: Request, res: Response) => {
 
   const token = generateToken(user.id, user.role, user.shop);
 
-  res.cookie(`${subdomain}-token`, token, {
+  res.cookie(`at`, token, {
     httpOnly: process.env.NODE_ENV === "production", // Secure against XSS
     secure: process.env.NODE_ENV === "production", // Only HTTPS in production
     sameSite: "strict", // Prevent CSRF attacks
