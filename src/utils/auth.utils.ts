@@ -14,8 +14,8 @@ export const comparePassword = async (password: string, hash: string): Promise<b
   return bcrypt.compare(password, hash);
 };
 
-export const generateToken = (userId: string, role: string): string => {
-  return jwt.sign({ id: userId, role }, config.jwtSecret, { expiresIn: "7d" });
+export const generateToken = (userId: string, role: string, shop_id: string | null): string => {
+  return jwt.sign({ id: userId, role, shop_id }, config.jwtSecret, { expiresIn: "7d" });
 };
 
 export const verifyToken = (token: string): IJWTData | null => {

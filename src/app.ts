@@ -25,7 +25,20 @@ export class Server {
   }
 
   private securityMiddlewares(app: Application): void {
-    app.use(cors());
+    const allowedOrigins = ["http://xotdog.localhost:3000", "http://shop1.localhost:3000", "http://shop2.localhost:3000"];
+
+    app.use(
+      cors({
+        origin: (origin, callback) => {
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(new Error("Not allowed by CORS"));
+          }
+        },
+        credentials: true, // Allow cookies and authentication headers
+      }),
+    );
   }
 
   private standardMiddleware(app: Application): void {

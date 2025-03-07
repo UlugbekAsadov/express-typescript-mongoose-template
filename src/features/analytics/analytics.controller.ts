@@ -14,10 +14,7 @@ export const getShopAnalytics = asyncWrapper(async (req: Request, res: Response)
 
   const analytics = await getAllTimeShopAnalytics(shopId.toString());
 
-  res.status(200).json({
-    success: true,
-    data: analytics,
-  });
+  res.status(200).json(analytics);
 });
 
 export const getShopAnalyticsCurrentMonth = asyncWrapper(async (req: Request, res: Response) => {

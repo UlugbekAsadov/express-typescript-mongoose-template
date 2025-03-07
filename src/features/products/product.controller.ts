@@ -32,7 +32,7 @@ export const getAllProducts = asyncWrapper(async (req: Request, res: Response) =
 
   const products = await Product.find({ shop: shop._id }).populate("shop", "_id, name").populate("category", "_id, title");
 
-  res.status(200).json({ success: true, products });
+  res.status(200).json({ success: true, data: products });
 });
 
 export const getProductById = asyncWrapper(async (req: Request, res: Response) => {

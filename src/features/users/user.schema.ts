@@ -7,7 +7,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   role: UserRoles;
-  shop_name: string | null;
+  shop: string | null;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<IUser>({
     enum: Object.values(UserRoles),
     default: UserRoles.USER,
   },
-  shop_name: { type: String, default: null },
+  shop: { type: mongoose.Schema.ObjectId, ref: "Shop", default: null },
 });
 
 export const User = mongoose.model("User", userSchema);

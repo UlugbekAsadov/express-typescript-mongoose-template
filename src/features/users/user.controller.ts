@@ -10,6 +10,7 @@ import { UserRoles } from "./utils/user.enum";
 
 export const loginUser = asyncWrapper(async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  const subdomain = req.hostname.split(".")[0];
 
   const user = await User.findOne({ email });
 
@@ -23,13 +24,20 @@ export const loginUser = asyncWrapper(async (req: Request, res: Response) => {
     throw new BadRequestError(ERROR_MESSAGES.INVALID_CREDENTIALS);
   }
 
-  const token = generateToken(user.id, user.role);
+  const token = generateToken(user.id, user.role, user.shop);
+
+  res.cookie(`${subdomain}-token`, token, {
+    httpOnly: process.env.NODE_ENV === "production", // Secure against XSS
+    secure: process.env.NODE_ENV === "production", // Only HTTPS in production
+    sameSite: "strict", // Prevent CSRF attacks
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
   res.json({ token, user: { full_name: user.full_name, email: user.email, role: user.role } });
 });
 
 export const registerUser = asyncWrapper(async (req: Request, res: Response) => {
-  const { full_name, email, password, role, shop_name } = req.body;
+  const { full_name, email, password, role } = req.body;
 
   const existingUser = await User.findOne({ email });
 
@@ -44,7 +52,6 @@ export const registerUser = asyncWrapper(async (req: Request, res: Response) => 
     email,
     password: hashedPassword,
     role: role || UserRoles.USER,
-    shop_name: role === UserRoles.STORE_OWNER ? shop_name : null,
   });
 
   await user.save();
@@ -56,11 +63,11 @@ export const getMe = asyncWrapper(async (req: Request, res: Response) => {
     throw new NotAuthorizedError(ERROR_MESSAGES.UNAUTHORIZED_ACCESS);
   }
 
-  const user = await User.findById(req.user.id).select("-password");
+  const user = await User.findById(req.user.id).select("-password").populate("shop", "_id, name");
 
   if (!user) {
     throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
   }
 
-  res.json({ user });
+  res.json(user);
 });

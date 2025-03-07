@@ -74,7 +74,7 @@ export const getShopOrders = asyncWrapper(async (req: Request, res: Response) =>
     { path: "user", select: "_id full_name" },
   ]);
 
-  res.status(200).json({ success: true, orders });
+  res.status(200).json({ success: true, data: orders });
 });
 
 // Get Single Order
@@ -85,7 +85,7 @@ export const getOrderById = asyncWrapper(async (req: Request, res: Response) => 
   ]);
 
   if (!order) throw new NotFoundError(ERROR_MESSAGES.ORDER_NOT_FOUND);
-  res.status(200).json({ success: true, order });
+  res.status(200).json({ success: true, data: order });
 });
 
 // Update Order Status (Admin/Shop Owner)
