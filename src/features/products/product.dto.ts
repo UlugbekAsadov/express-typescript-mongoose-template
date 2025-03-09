@@ -13,9 +13,9 @@ export const createProductSchema = Joi.object({
   is_available: Joi.boolean().required(),
   image: Joi.string().uri().allow(null),
   price: Joi.number().min(0).required(),
-  compare_price: Joi.number().min(0).optional(),
+  compare_price: Joi.number().min(0).allow(null, "").optional(),
   variants: Joi.array().items(variantSchema).optional(),
-  category: Joi.string().required(),
+  category: Joi.string().allow(null, "").optional(),
 });
 
 export const updateProductSchema = Joi.object({
@@ -24,7 +24,7 @@ export const updateProductSchema = Joi.object({
   is_available: Joi.boolean().optional(),
   image: Joi.string().uri().allow(null),
   price: Joi.number().min(0).optional(),
-  compare_price: Joi.number().min(0).optional(),
+  compare_price: Joi.number().min(0).allow(null, "").optional(),
   variants: Joi.array().items(variantSchema).optional(),
-  category: Joi.string().optional(),
+  category: Joi.string().allow(null, "").optional(),
 });

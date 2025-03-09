@@ -26,25 +26,24 @@ export interface IProduct extends Document {
 const VariantSchema = new Schema<IVariant>(
   {
     name: { type: String, required: true },
-    id: { type: Schema.Types.ObjectId, auto: true },
     price: { type: Number, required: true },
     compare_price: { type: Number, default: null },
     image: { type: String, default: null },
   },
-  { _id: false },
+  { _id: true },
 );
 
 const ProductSchema = new Schema<IProduct>(
   {
     title: { type: String, required: true },
     description: { type: String, default: null },
-    is_available: { type: Boolean, default: true },
+    is_available: { type: Boolean, default: false },
     image: { type: String, default: null },
     price: { type: Number, required: true },
     compare_price: { type: Number, default: null },
     variants: { type: [VariantSchema], default: [] },
     shop: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
-    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: false },
   },
   { timestamps: true },
 );

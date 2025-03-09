@@ -39,7 +39,7 @@ export const getProductById = asyncWrapper(async (req: Request, res: Response) =
   const product = await Product.findById(req.params.id).populate("shop", "_id, name").populate("category", "_id, title");
   if (!product) throw new NotFoundError(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
-  res.status(200).json({ success: true, product });
+  res.status(200).json(product);
 });
 
 export const updateProduct = asyncWrapper(async (req: Request, res: Response) => {
