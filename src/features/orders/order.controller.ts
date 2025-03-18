@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { asyncWrapper } from "../../middlewares/async-wrapper.middleware";
 import { BadRequestError, NotFoundError } from "../../utils/error-handler";
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../utils/response-messages";
-import { Product } from "../products/product.schema";
+import { IProduct, Product } from "../products/product.schema";
 import { Shop } from "../shops/shop.schema";
 import { Order } from "./order.schema";
 import { OrderStatus } from "./utils/order.enum";
@@ -81,10 +81,28 @@ export const getOrderById = asyncWrapper(async (req: Request, res: Response) => 
   const order = await Order.findById(req.params.id).populate([
     { path: "shop", select: "_id name" },
     { path: "user", select: "_id full_name" },
+    { path: "products.product_id", select: "_id title price image" },
   ]);
 
+  console.log(order);
+
   if (!order) throw new NotFoundError(ERROR_MESSAGES.ORDER_NOT_FOUND);
-  res.status(200).json({ success: true, data: order });
+
+  const formattedOrder = {
+    ...order.toObject(),
+    products: order.products.map((p) => {
+      const product = p.product_id as unknown as IProduct;
+      return {
+        product_id: product._id,
+        title: product.title,
+        price: product.price,
+        quantity: p.quantity,
+        image: product.image,
+      };
+    }),
+  };
+
+  res.status(200).json(formattedOrder);
 });
 
 // Update Order Status (Admin/Shop Owner)

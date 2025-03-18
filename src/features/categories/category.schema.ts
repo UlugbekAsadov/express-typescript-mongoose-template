@@ -4,8 +4,9 @@ export interface ICategory extends Document {
   title: string;
   description?: string;
   shop: mongoose.Schema.Types.ObjectId;
-  isBanner: boolean;
+  is_banner: boolean;
   image?: string;
+  is_active: boolean;
 }
 
 const CategorySchema = new Schema<ICategory>(
@@ -13,8 +14,9 @@ const CategorySchema = new Schema<ICategory>(
     title: { type: String, required: true },
     description: { type: String },
     shop: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
-    isBanner: { type: Boolean, default: false },
+    is_banner: { type: Boolean, default: false },
     image: { type: String },
+    is_active: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

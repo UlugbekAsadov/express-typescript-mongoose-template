@@ -24,7 +24,7 @@ export const requireRole = (requiredRole: UserRoles) => {
     if (!hasPermission) return next(new BadRequestError(ERROR_MESSAGES.UNAUTHORIZED_ACCESS));
 
     // Fetch shop only for STAFF or STORE_OWNER
-    if (userRole === UserRoles.STAFF || userRole === UserRoles.STORE_OWNER) {
+    if (userRole === UserRoles.STAFF || userRole === UserRoles.STORE_OWNER || userRole === UserRoles.SUPER_ADMIN) {
       const shop = await Shop.findById(userShopId);
       if (!shop) return next(new BadRequestError(ERROR_MESSAGES.SHOP_NOT_FOUND));
 
